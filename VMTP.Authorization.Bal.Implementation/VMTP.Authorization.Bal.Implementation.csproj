@@ -1,0 +1,24 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net7.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <Folder Include="Handlers\Commands\" />
+      <Folder Include="Providers\" />
+      <Folder Include="Services\" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\VMTP.Authorization.Bal.Abstractions\VMTP.Authorization.Bal.Abstractions.csproj" />
+      <ProjectReference Include="..\VMTP.Authorization.Dal.Abstractions\VMTP.Authorization.Dal.Abstractions.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="MediatR" Version="12.4.0" />
+    </ItemGroup>
+
+</Project>
