@@ -15,6 +15,9 @@ public class EntryConfiguration : IEntityTypeConfiguration<Entry>
         builder.Property(x => x.Ip)
             .IsRequired();
         
+        builder.Property(x => x.IsTrusted)
+            .IsRequired();
+        
         builder.HasIndex(x => x.Token);
 
         builder.HasOne(x => x.Authentication)

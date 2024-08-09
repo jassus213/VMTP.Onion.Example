@@ -7,6 +7,7 @@ public class EntryDTO
     public string Ip { get; init; } = string.Empty;
     public string Device { get; init; } = string.Empty;
     public string Token { get; init; } = string.Empty;
+    public bool IsTrusted { get; init; }
 
     public AuthenticationDTO Authentication { get; init; } = null!;
 }

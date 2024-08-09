@@ -7,8 +7,12 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\VMTP.Authorization.Bal.Abstractions\VMTP.Authorization.Bal.Abstractions.csproj" />
-      <ProjectReference Include="..\VMTP.Authorization.Dal.Abstractions\VMTP.Authorization.Dal.Abstractions.csproj" />
+      <Folder Include="Providers\" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\VMTP.Code.Bal.Abstractions\VMTP.Code.Bal.Abstractions.csproj" />
+      <ProjectReference Include="..\VMTP.Code.Dal.Abstractions\VMTP.Code.Dal.Abstractions.csproj" />
     </ItemGroup>
 
     <ItemGroup>

@@ -2,7 +2,7 @@
 
 namespace VMTP.Authorization.Dal.Abstractions.Contexts;
 
-public interface IAuthentiactionReadContext
+public interface IAuthenticationReadContext
 {
     IQueryable<Authentication> Authentications { get; }
     IQueryable<Entry> Entries { get; }

@@ -3,15 +3,15 @@ using Microsoft.EntityFrameworkCore;
 using VMTP.Authorization.Application.Models.DTOs;
 using VMTP.Authorization.Dal.Abstractions.Contexts;
 
-namespace VMTP.Authorization.Bal.Implementation.Handlers.Queries;
+namespace VMTP.Authorization.Bal.Implementation.Handlers.Queries.Authorization;
 
 public record SearchAuthorizationByLoginQuery(string Login) : IRequest<AuthenticationDTO?>;
     
 public class SearchAuthorizationByLoginQueryHandler : IRequestHandler<SearchAuthorizationByLoginQuery, AuthenticationDTO?>
 {
-    private readonly IAuthentiactionReadContext _context;
+    private readonly IAuthenticationReadContext _context;
 
-    public SearchAuthorizationByLoginQueryHandler(IAuthentiactionReadContext context)
+    public SearchAuthorizationByLoginQueryHandler(IAuthenticationReadContext context)
     {
         _context = context;
     }

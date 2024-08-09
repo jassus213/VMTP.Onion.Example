@@ -5,7 +5,9 @@ using VMTP.Authorization.Bal.Abstractions.Managers.Requests;
 using VMTP.Authorization.Bal.Abstractions.Services;
 using VMTP.Authorization.Bal.Abstractions.Services.Requests;
 using VMTP.Authorization.Bal.Abstractions.Services.Responses;
-using VMTP.Authorization.Bal.Implementation.Handlers.Queries;
+using VMTP.Authorization.Bal.Implementation.Handlers.Commands.Entry;
+using VMTP.Authorization.Bal.Implementation.Handlers.Queries.Authorization;
+using VMTP.Authorization.Bal.Implementation.Handlers.Queries.Entry;
 using VMTP.Authorization.Domain.Utilities;
 
 namespace VMTP.Authorization.Bal.Implementation.Managers;
@@ -31,9 +33,19 @@ public class LoginManager : ILoginManager
 
         if (HashUtil.ComputeHash(request.Password) != authentication.Password)
             throw new WrongPasswordException();
-        
-        // Validate Entry
-        
+
+        var entry = await _mediator.Send(new SearchEntryByAuthorizationIdQuery(authentication.Id), cancellationToken);
+        if (entry == null)
+        {
+            await _mediator.Send(new AddEntryCommand(authentication.Id, request.Ip, request.Device), cancellationToken);
+            throw new EntryIsNotTrustedException();
+        }
+
+        if (!entry.IsTrusted)
+        {
+            throw new EntryIsNotTrustedException();
+        }
+
         return _tokenService.CreatePair(new IdentityInfo
         {
             AuthorizationId = authentication.Id,

@@ -4,7 +4,7 @@ using VMTP.Authorization.Domain.Entities;
 
 namespace VMTP.Authorization.Dal.Implementation.Contexts;
 
-public class AuthentiactionReadContext : DbContext, IAuthentiactionReadContext
+public class AuthenticationReadContext : DbContext, IAuthenticationReadContext
 {
     public IQueryable<Authentication> Authentications => Set<Authentication>()
         .AsNoTracking();
@@ -12,7 +12,7 @@ public class AuthentiactionReadContext : DbContext, IAuthentiactionReadContext
     public IQueryable<Entry> Entries => Set<Entry>()
         .AsNoTracking();
 
-    public AuthentiactionReadContext(DbContextOptions<AuthentiactionReadContext> options) : base(options)
+    public AuthenticationReadContext(DbContextOptions<AuthenticationReadContext> options) : base(options)
     {
     }
 
@@ -20,6 +20,6 @@ public class AuthentiactionReadContext : DbContext, IAuthentiactionReadContext
     {
         base.OnModelCreating(modelBuilder);
 
-        modelBuilder.ApplyConfigurationsFromAssembly(typeof(AuthentiactionReadContext).Assembly);
+        modelBuilder.ApplyConfigurationsFromAssembly(typeof(AuthenticationReadContext).Assembly);
     }
 }
