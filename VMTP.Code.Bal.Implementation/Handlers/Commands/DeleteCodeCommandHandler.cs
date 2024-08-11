@@ -16,9 +16,7 @@ file class DeleteCodeCommandHandler : IRequestHandler<DeleteCodeCommand>
     }
 
     public async Task Handle(DeleteCodeCommand request, CancellationToken cancellationToken)
-    {
-        await _context.Codes
+        => await _context.Codes
             .Where(x => x.Id == request.Id)
             .ExecuteDeleteAsync(cancellationToken);
-    }
 }

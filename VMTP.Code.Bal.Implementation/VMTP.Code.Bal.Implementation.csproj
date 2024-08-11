@@ -7,16 +7,24 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <Folder Include="Providers\" />
-    </ItemGroup>
-
-    <ItemGroup>
       <ProjectReference Include="..\VMTP.Code.Bal.Abstractions\VMTP.Code.Bal.Abstractions.csproj" />
       <ProjectReference Include="..\VMTP.Code.Dal.Abstractions\VMTP.Code.Dal.Abstractions.csproj" />
     </ItemGroup>
 
     <ItemGroup>
       <PackageReference Include="MediatR" Version="12.4.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Compile Remove="Providers\**" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <EmbeddedResource Remove="Providers\**" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Remove="Providers\**" />
     </ItemGroup>
 
 </Project>

@@ -2,5 +2,6 @@
 
 public enum CodeType
 {
-    SuspiciousEntry = 0
+    AccountConfirmation = 0,
+    SuspiciousEntry = 1
 }

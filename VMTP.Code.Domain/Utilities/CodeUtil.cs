@@ -1,6 +1,6 @@
 ﻿namespace VMTP.Code.Domain.Utilities;
 
-public class CodeUtil
+public static class CodeUtil
 {
     private static readonly Random Random = new Random();
     private const int CODE_LENGTH = 6;

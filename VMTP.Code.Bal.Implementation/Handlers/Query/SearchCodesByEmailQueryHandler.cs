@@ -5,20 +5,21 @@ using VMTP.Code.Dal.Abstractions.Contexts;
 
 namespace VMTP.Code.Bal.Implementation.Handlers.Query;
 
-public record SearchCodeByValueQuery(string Value) : IRequest<CodeDTO?>;
+public record SearchCodesByEmailQuery(string Email) : IRequest<IReadOnlyCollection<CodeDTO>>;
 
-public class SearchCodeByValueQueryHandler : IRequestHandler<SearchCodeByValueQuery, CodeDTO?>
+public class SearchCodesByEmailQueryHandler : IRequestHandler<SearchCodesByEmailQuery, IReadOnlyCollection<CodeDTO>>
 {
     private readonly ICodeReadContext _context;
 
-    public SearchCodeByValueQueryHandler(ICodeReadContext context)
+    public SearchCodesByEmailQueryHandler(ICodeReadContext context)
     {
         _context = context;
     }
 
-    public async Task<CodeDTO?> Handle(SearchCodeByValueQuery request, CancellationToken cancellationToken)
+    public async Task<IReadOnlyCollection<CodeDTO>> Handle(SearchCodesByEmailQuery request,
+        CancellationToken cancellationToken)
         => await _context.Codes
-            .Where(x => x.Value == request.Value)
+            .Where(x => x.Email == request.Email)
             .Select(x => new CodeDTO()
             {
                 Id = x.Id,
@@ -28,5 +29,5 @@ public class SearchCodeByValueQueryHandler : IRequestHandler<SearchCodeByValueQu
                 ExpirationTime = x.ExpirationTime,
                 AuthorizationId = x.AuthorizationId
             })
-            .FirstOrDefaultAsync(cancellationToken);
+            .ToArrayAsync(cancellationToken);
 }

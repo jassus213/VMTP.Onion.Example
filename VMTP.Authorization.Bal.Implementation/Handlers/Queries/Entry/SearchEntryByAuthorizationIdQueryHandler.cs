@@ -17,8 +17,7 @@ public class SearchEntryByAuthorizationIdQueryHandler : IRequestHandler<SearchEn
     }
 
     public async Task<EntryDTO?> Handle(SearchEntryByAuthorizationIdQuery request, CancellationToken cancellationToken)
-    {
-        return await _context.Entries
+        => await _context.Entries
             .Where(x => x.AuthenticationId == request.AuthorizationId)
             .Select(x => new EntryDTO()
             {
@@ -28,5 +27,4 @@ public class SearchEntryByAuthorizationIdQueryHandler : IRequestHandler<SearchEn
                 Ip = x.Ip,
                 Token = x.Token
             }).FirstOrDefaultAsync(cancellationToken);
-    }
 }
