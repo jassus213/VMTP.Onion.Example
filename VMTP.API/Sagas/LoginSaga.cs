@@ -1,4 +1,4 @@
-﻿using VMTP.API.Controllers.Sagas.Requests;
+﻿using VMTP.API.Sagas.Requests;
 using VMTP.Authorization.Application.Exceptions;
 using VMTP.Authorization.Bal.Abstractions.Managers.Entry;
 using VMTP.Authorization.Bal.Abstractions.Managers.Entry.Requests;
@@ -13,7 +13,7 @@ using VMTP.Code.Bal.Abstractions.Managers.Requests;
 using VMTP.Notification.Bal.Abstractions.Managers;
 using VMTP.Notification.Bal.Abstractions.Managers.Requests;
 
-namespace VMTP.API.Controllers.Sagas;
+namespace VMTP.API.Sagas;
 
 public class LoginSaga
 {
@@ -55,7 +55,7 @@ public class LoginSaga
         }
         catch (EntryIsNotTrustedException e)
         {
-            _logger.LogWarning(e, "Ocurred not trusted entry for account: {Login}", authentication.Login);
+            _logger.LogWarning(e, "Occurred not trusted entry for account: {Login}", authentication.Login);
             var code = await _codeManager.CreateAsync(new CreateCodeRequest(request.Login, CodeType.SuspiciousEntry),
                 cancellationToken);
 

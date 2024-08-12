@@ -11,9 +11,9 @@ using VMTP.Code.Bal.Abstractions.Managers.Requests;
 using VMTP.Code.Bal.Abstractions.Providers.Requests;
 using VMTP.Notification.Bal.Abstractions.Managers;
 using VMTP.Notification.Bal.Abstractions.Managers.Requests;
-using RegisterRequest = VMTP.API.Controllers.Sagas.Requests.RegisterRequest;
+using RegisterRequest = VMTP.API.Sagas.Requests.RegisterRequest;
 
-namespace VMTP.API.Controllers.Sagas;
+namespace VMTP.API.Sagas;
 
 public class RegisterSaga
 {
