@@ -1,29 +1,27 @@
-﻿using MediatR;
-using VMTP.Authorization.Application.Exceptions;
+﻿using VMTP.Authorization.Application.Exceptions;
 using VMTP.Authorization.Application.Models.Models;
 using VMTP.Authorization.Bal.Abstractions.Managers.Entry;
 using VMTP.Authorization.Bal.Abstractions.Managers.Entry.Requests;
-using VMTP.Authorization.Bal.Implementation.Handlers.Commands.Entry;
-using VMTP.Authorization.Bal.Implementation.Handlers.Queries.Entry;
+using VMTP.Authorization.Dal.Abstractions.Storage;
 
 namespace VMTP.Authorization.Bal.Implementation.Managers;
 
 public class EntryManager : IEntryManager
 {
-    private readonly IMediator _mediator;
+    private readonly IEntryStorage _entryStorage;
 
-    public EntryManager(IMediator mediator)
+    public EntryManager(IEntryStorage entryStorage)
     {
-        _mediator = mediator;
+        _entryStorage = entryStorage;
     }
 
     public async Task<EntryModel> GetOrCreateEntryAndValidateAsync(GetOrCreateEntryAndValidateRequest request,
         CancellationToken cancellationToken)
     {
-        var entry = await _mediator.Send(new SearchEntryByAuthorizationIdQuery(request.AuthenticationId), cancellationToken);
+        var entry = await _entryStorage.FindByAuthenticationIdAsync(request.AuthenticationId, cancellationToken);
         if (entry == null)
         {
-            await _mediator.Send(new AddEntryCommand(request.AuthenticationId, request.Ip, request.Device), cancellationToken);
+            await _entryStorage.AddAsync(request.AuthenticationId, request.Ip, request.Device, cancellationToken);
             throw new EntryIsNotTrustedException();
         }
 

@@ -1,61 +1,52 @@
-﻿using MediatR;
-using Microsoft.Extensions.Logging;
-using VMTP.Authorization.Application.Exceptions;
+﻿using VMTP.Authorization.Application.Exceptions;
 using VMTP.Authorization.Application.Models.Models;
 using VMTP.Authorization.Bal.Abstractions.Managers.Authentication;
 using VMTP.Authorization.Bal.Abstractions.Managers.Authentication.Requests;
 using VMTP.Authorization.Bal.Abstractions.Providers.Authentication.Requests;
-using VMTP.Authorization.Bal.Implementation.Handlers.Commands.Authentication;
-using VMTP.Authorization.Bal.Implementation.Handlers.Commands.Entry;
-using VMTP.Authorization.Bal.Implementation.Handlers.Queries.Authorization;
+using VMTP.Authorization.Dal.Abstractions.Storage;
 using VMTP.Authorization.Domain.Utilities;
-using VMTP.Dal.Abstractions;
 
 namespace VMTP.Authorization.Bal.Implementation.Managers;
 
 public class AuthenticationManager : IAuthenticationManager
 {
-    private readonly IMediator _mediator;
-    private readonly ITransactionContext _transactionContext;
-    private readonly ILogger<AuthenticationManager> _logger;
+    private readonly IAuthenticationStorage _authenticationStorage;
+    private readonly IAuthenticationAndEntryUnitOfWork _unitOfWork;
 
-    public AuthenticationManager(IMediator mediator, ILogger<AuthenticationManager> logger,
-        ITransactionContext transactionContext)
+    public AuthenticationManager(IAuthenticationStorage authenticationStorage,
+        IAuthenticationAndEntryUnitOfWork unitOfWork)
     {
-        _mediator = mediator;
-        _logger = logger;
-        _transactionContext = transactionContext;
+        _authenticationStorage = authenticationStorage;
+        _unitOfWork = unitOfWork;
     }
 
-    public async Task<AuthenticationDeepedModel> CreateAuthenticationWithEntryAsync(CreateAuthenticationRequest request,
+    public async Task<AuthenticationDeepModel> CreateAuthenticationWithEntryAsync(CreateAuthenticationRequest request,
         CancellationToken cancellationToken)
     {
-        await using var transaction = await _transactionContext.BeginTransactionAsync(cancellationToken);
+        await _unitOfWork.BeginTransactionAsync(cancellationToken);
+        
+        var authentication =
+            await _unitOfWork.AuthenticationStorage.AddAsync(request.Login, request.Password, cancellationToken);
 
-        var authentication = await _mediator.Send(
-            new AddAuthenticationCommand(request.Login, HashUtil.ComputeHash(request.Password)),
+        var entry = await _unitOfWork.EntryStorage.AddAsync(authentication.Id, request.Ip, request.Device,
             cancellationToken);
 
-        var entry = await _mediator.Send(new AddEntryCommand(authentication.Id, request.Ip, request.Device),
-            cancellationToken);
+        await _unitOfWork.CompleteAsync(cancellationToken);
 
-        await transaction.CommitAsync(cancellationToken);
-
-        return new AuthenticationDeepedModel(authentication.Id, entry.Id, authentication.Login, entry.Ip, entry.Device);
+        return new AuthenticationDeepModel(authentication.Id, entry.Id, authentication.Login, entry.Ip, entry.Device);
     }
 
-    public async Task<AuthenticationModel?> SearchAuthentiactionAsync(string login, CancellationToken cancellationToken)
+    public async Task<AuthenticationModel?> SearchAuthenticationAsync(string login, CancellationToken cancellationToken)
     {
-        var authetnication = await _mediator.Send(new SearchAuthorizationByLoginQuery(login), cancellationToken);
-        return authetnication == null ? null : new AuthenticationModel(authetnication.Id, authetnication.Login);
+        var authentication = await _authenticationStorage.FindByLoginIdAsync(login, cancellationToken);
+        return authentication == null ? null : new AuthenticationModel(authentication.Id, authentication.Login);
     }
 
     public async Task<AuthenticationModel> GetAuthenticationAndValidateAsync(
         GetAuthenticationAndValidateRequest request,
         CancellationToken cancellationToken)
     {
-        var authentication =
-            await _mediator.Send(new SearchAuthorizationByLoginQuery(request.Login), cancellationToken);
+        var authentication = await _authenticationStorage.FindByLoginIdAsync(request.Login, cancellationToken);
 
         if (authentication == null)
             throw new UserIsNotRegisteredException();

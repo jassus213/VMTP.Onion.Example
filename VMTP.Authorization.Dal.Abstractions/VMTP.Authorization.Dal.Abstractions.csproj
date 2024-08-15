@@ -7,6 +7,7 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\VMTP.Authorization.Application\VMTP.Authorization.Application.csproj" />
       <ProjectReference Include="..\VMTP.Authorization.Domain\VMTP.Authorization.Domain.csproj" />
       <ProjectReference Include="..\VMTP.Dal.Abstractions\VMTP.Dal.Abstractions.csproj" />
     </ItemGroup>

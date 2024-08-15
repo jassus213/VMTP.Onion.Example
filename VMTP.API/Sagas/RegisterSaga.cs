@@ -17,16 +17,14 @@ namespace VMTP.API.Sagas;
 
 public class RegisterSaga
 {
-    private readonly ILogger<RegisterSaga> _logger;
     private readonly IAuthenticationManager _authenticationManager;
     private readonly ITokenManager _tokenManager;
     private readonly ICodeManager _codeManager;
     private readonly INotificationManager _notificationManager;
 
-    public RegisterSaga(ILogger<RegisterSaga> logger, IAuthenticationManager authenticationManager,
+    public RegisterSaga(IAuthenticationManager authenticationManager,
         ICodeManager codeManager, INotificationManager notificationManager, ITokenManager tokenManager)
     {
-        _logger = logger;
         _authenticationManager = authenticationManager;
         _codeManager = codeManager;
         _notificationManager = notificationManager;
@@ -35,7 +33,7 @@ public class RegisterSaga
 
     public async Task RegisterChallengeAsync(string login, CancellationToken cancellationToken)
     {
-        var authentication = await _authenticationManager.SearchAuthentiactionAsync(login, cancellationToken);
+        var authentication = await _authenticationManager.SearchAuthenticationAsync(login, cancellationToken);
         if (authentication != null)
             throw new UserAlreadyExistException();
 
@@ -52,7 +50,7 @@ public class RegisterSaga
 
     public async Task<Tokens> RegisterAsync(RegisterRequest request, CancellationToken cancellationToken)
     {
-        var authentication = await _authenticationManager.SearchAuthentiactionAsync(request.Login, cancellationToken);
+        var authentication = await _authenticationManager.SearchAuthenticationAsync(request.Login, cancellationToken);
         if (authentication != null)
             throw new UserAlreadyExistException();
 

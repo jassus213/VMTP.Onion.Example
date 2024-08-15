@@ -6,12 +6,12 @@ using VMTP.Authorization.Domain.Entities;
 
 namespace VMTP.Authorization.Dal.Implementation.Contexts;
 
-public class AuthentiactionWriteContext : DbContext, IAuthenticationWriteContext
+public class AuthentiactionContext : DbContext, IAuthenticationContext
 {
     public DbSet<Authentication> Authentications => Set<Authentication>();
     public DbSet<Entry> Entries => Set<Entry>();
 
-    public AuthentiactionWriteContext(DbContextOptions<AuthentiactionWriteContext> options) : base(options)
+    public AuthentiactionContext(DbContextOptions<AuthentiactionContext> options) : base(options)
     {
     }
 
@@ -19,7 +19,7 @@ public class AuthentiactionWriteContext : DbContext, IAuthenticationWriteContext
     {
         base.OnModelCreating(modelBuilder);
 
-        modelBuilder.ApplyConfigurationsFromAssembly(typeof(AuthentiactionWriteContext).Assembly);
+        modelBuilder.ApplyConfigurationsFromAssembly(typeof(AuthentiactionContext).Assembly);
     }
 
     /// <inheritdoc cref="DatabaseFacade.BeginTransactionAsync"/>

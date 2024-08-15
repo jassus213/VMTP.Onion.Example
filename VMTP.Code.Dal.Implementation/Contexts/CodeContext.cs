@@ -3,11 +3,11 @@ using VMTP.Code.Dal.Abstractions.Contexts;
 
 namespace VMTP.Code.Dal.Implementation.Contexts;
 
-public class CodeWriteContext : DbContext, ICodeWriteContext
+public class CodeContext : DbContext, ICodeContext
 {
     public DbSet<Domain.Entities.Code> Codes => Set<Domain.Entities.Code>();
 
-    public CodeWriteContext(DbContextOptions<CodeWriteContext> options) : base(options)
+    public CodeContext(DbContextOptions<CodeContext> options) : base(options)
     {
     }
 
@@ -15,6 +15,6 @@ public class CodeWriteContext : DbContext, ICodeWriteContext
     {
         base.OnModelCreating(modelBuilder);
 
-        modelBuilder.ApplyConfigurationsFromAssembly(typeof(CodeWriteContext).Assembly);
+        modelBuilder.ApplyConfigurationsFromAssembly(typeof(CodeContext).Assembly);
     }
 }

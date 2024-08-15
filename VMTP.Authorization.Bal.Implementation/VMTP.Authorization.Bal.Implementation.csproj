@@ -11,8 +11,4 @@
       <ProjectReference Include="..\VMTP.Authorization.Dal.Abstractions\VMTP.Authorization.Dal.Abstractions.csproj" />
     </ItemGroup>
 
-    <ItemGroup>
-      <PackageReference Include="MediatR" Version="12.4.0" />
-    </ItemGroup>
-
 </Project>

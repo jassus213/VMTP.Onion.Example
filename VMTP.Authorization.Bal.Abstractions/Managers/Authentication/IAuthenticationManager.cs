@@ -6,5 +6,5 @@ namespace VMTP.Authorization.Bal.Abstractions.Managers.Authentication;
 
 public interface IAuthenticationManager : IAuthenticationProvider
 {
-    Task<AuthenticationDeepedModel> CreateAuthenticationWithEntryAsync(CreateAuthenticationRequest request, CancellationToken cancellationToken);
+    Task<AuthenticationDeepModel> CreateAuthenticationWithEntryAsync(CreateAuthenticationRequest request, CancellationToken cancellationToken);
 }
