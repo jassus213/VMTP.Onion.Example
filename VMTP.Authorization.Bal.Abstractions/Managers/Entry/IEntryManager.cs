@@ -5,5 +5,6 @@ namespace VMTP.Authorization.Bal.Abstractions.Managers.Entry;
 
 public interface IEntryManager
 {
+    Task UpdateTokenAsync(Guid entryId, string token, CancellationToken cancellationToken);
     Task<EntryModel> GetOrCreateEntryAndValidateAsync(GetOrCreateEntryAndValidateRequest request, CancellationToken cancellationToken);
 }

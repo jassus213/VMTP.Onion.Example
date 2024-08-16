@@ -6,5 +6,5 @@ public interface IAuthenticationStorage
 {
     Task<AuthenticationDTO> AddAsync(string login, string password, CancellationToken cancellationToken);
     
-    Task<AuthenticationDTO?> FindByLoginIdAsync(string login, CancellationToken cancellationToken);
+    Task<AuthenticationDTO?> FindByLoginAsync(string login, CancellationToken cancellationToken);
 }

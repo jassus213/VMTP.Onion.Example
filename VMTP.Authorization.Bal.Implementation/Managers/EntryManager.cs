@@ -18,7 +18,9 @@ public class EntryManager : IEntryManager
     public async Task<EntryModel> GetOrCreateEntryAndValidateAsync(GetOrCreateEntryAndValidateRequest request,
         CancellationToken cancellationToken)
     {
-        var entry = await _entryStorage.FindByAuthenticationIdAsync(request.AuthenticationId, cancellationToken);
+        var entry = await _entryStorage.FindByDeviceAndAuthenticationIdAsync(request.AuthenticationId, request.Device,
+            cancellationToken);
+        
         if (entry == null)
         {
             await _entryStorage.AddAsync(request.AuthenticationId, request.Ip, request.Device, cancellationToken);
@@ -28,5 +30,10 @@ public class EntryManager : IEntryManager
         return entry.IsTrusted
             ? new EntryModel(entry.Id, entry.AuthenticationId, entry.Device, entry.Ip, entry.IsTrusted)
             : throw new EntryIsNotTrustedException();
+    }
+
+    public async Task UpdateTokenAsync(Guid entryId, string token, CancellationToken cancellationToken)
+    {
+        await _entryStorage.UpdateTokenAsync(entryId, token, cancellationToken);
     }
 }

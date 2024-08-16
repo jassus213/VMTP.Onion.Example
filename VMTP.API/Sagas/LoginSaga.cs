@@ -50,8 +50,12 @@ public class LoginSaga
                     request.Ip),
                 cancellationToken);
 
-            return await _tokenManager.CreatePair(
+            var pair = await _tokenManager.CreatePair(
                 new CreatePairRequest(authentication.Id, entry.Id, authentication.Login, entry.Ip), cancellationToken);
+
+            await _entryManager.UpdateTokenAsync(entry.Id, pair.RefreshToken, cancellationToken);
+            
+            return pair;
         }
         catch (EntryIsNotTrustedException e)
         {

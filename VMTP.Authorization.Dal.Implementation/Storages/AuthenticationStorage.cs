@@ -34,7 +34,7 @@ public class AuthenticationStorage : IAuthenticationStorage
         };
     }
 
-    public async Task<AuthenticationDTO?> FindByLoginIdAsync(string login, CancellationToken cancellationToken)
+    public async Task<AuthenticationDTO?> FindByLoginAsync(string login, CancellationToken cancellationToken)
     {
         return await _context.Authentications
             .Where(x => x.Login == login)

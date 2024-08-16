@@ -38,7 +38,7 @@ public class AuthenticationManager : IAuthenticationManager
 
     public async Task<AuthenticationModel?> SearchAuthenticationAsync(string login, CancellationToken cancellationToken)
     {
-        var authentication = await _authenticationStorage.FindByLoginIdAsync(login, cancellationToken);
+        var authentication = await _authenticationStorage.FindByLoginAsync(login, cancellationToken);
         return authentication == null ? null : new AuthenticationModel(authentication.Id, authentication.Login);
     }
 
@@ -46,7 +46,7 @@ public class AuthenticationManager : IAuthenticationManager
         GetAuthenticationAndValidateRequest request,
         CancellationToken cancellationToken)
     {
-        var authentication = await _authenticationStorage.FindByLoginIdAsync(request.Login, cancellationToken);
+        var authentication = await _authenticationStorage.FindByLoginAsync(request.Login, cancellationToken);
 
         if (authentication == null)
             throw new UserIsNotRegisteredException();
